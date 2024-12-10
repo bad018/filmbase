@@ -39,5 +39,16 @@ class UserWithAccount(User, MyModel):
     
 
 class Message(MyModel):
-    author = models.ForeignKey(
-        UserWithAccount, on_delete=models.CASCADE, verbose_name="Автор")
+    sender = models.ForeignKey(
+        UserWithAccount, on_delete=models.CASCADE, verbose_name="Пользователь, отправивший сообщение", related_name="sender")
+    recipient = models.ForeignKey(
+        UserWithAccount, on_delete=models.CASCADE, verbose_name="Пользователь, получивший сообщение", related_name="recipient")
+    content = models.TextField("Сообщение")
+
+    class Meta:
+        ordering = ["created_at"]
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
+    def __str__(self):
+        return f'From {self.sender} to {self.recipient}: {self.content[:20]}'
