@@ -6,6 +6,7 @@ from films.models import MyModel
 from django import forms
 import datetime
 
+
 class UserWithAccount(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -31,10 +32,11 @@ class UserWithAccount(models.Model):
     class Meta:
         ordering = ["user"]
         verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
+        verbose_name_plural = "Юзеры"
 
     def __str__(self):
-        return self.name
+        return self.user
+
 
 class Conversation(MyModel):
     participants = models.ManyToManyField(
@@ -47,11 +49,12 @@ class Conversation(MyModel):
     def __str__(self):
         return self.subject
 
+
 class Message(MyModel):
     conversation = models.ForeignKey(
         Conversation, 
         on_delete=models.CASCADE, 
-        verbose_name="Разговор", 
+        verbose_name="Беседа",
         related_name="messages"
     )
     sender = models.ForeignKey(
@@ -67,6 +70,8 @@ class Message(MyModel):
         related_name="received_messages"
     )
     content = models.TextField("Сообщение")
+    attachment = models.FileField()
+
 
     class Meta:
         ordering = ["created_at"]
