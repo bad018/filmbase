@@ -24,6 +24,10 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Пароли не совпадают.")
         return cd['password2']
 
+class UserWithAccountForm(forms.ModelForm):
+    class Meta:
+        model = UserWithAccount
+        fields = ['name']
 
 class UserEditForm(forms.ModelForm):
     class Meta:

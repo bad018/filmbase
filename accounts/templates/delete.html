@@ -1,0 +1,32 @@
+{% extends 'films/base.html' %}
+{% load django_bootstrap5 %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'accounts:userwithaccount_list' %}">
+        Пользователи
+      </a>
+    </li>
+    <li class="breadcrumb-item active">
+      Удаление пользователя: {{ user_with_account.user.username }}
+    </li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1>Удаление пользователя: {{ user_with_account.user.username }}</h1>
+
+<p>Вы уверены, что хотите удалить этого пользователя?</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Удалить</button>
+</form>
+
+<a href="{% url 'accounts:userwithaccount_detail' user_with_account.id %}">Отмена</a>
+
+{% endblock %}

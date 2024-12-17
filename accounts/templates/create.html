@@ -1,0 +1,27 @@
+{% extends 'films/base.html' %}
+{% load django_bootstrap5 %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:userwithaccount_list' %}">
+          Пользователи
+        </a>
+      </li>
+      <li class="breadcrumb-item active">
+        Новый пользователь
+      </li>
+    </ol>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <h1>Новый пользователь</h1>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form layout='floating' %}
+    {% bootstrap_button button_type="submit" content="Сохранить" %}
+  </form>
+{% endblock %}
