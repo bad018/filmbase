@@ -1,0 +1,37 @@
+{% extends 'accounts/base.html' %}
+{% load user_tags %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Беседа: {{ conversation.subject }}</h1>
+
+    <div class="list-group">
+        {% for message in messages %}
+        <div class="list-group-item">
+            <strong>{{ message.sender.username }}</strong>: {{ message.content }}
+            <div class="text-muted">
+                {{ message.created_at }}
+                {% if message.attachment %}
+                <br>
+                <a href="{{ message.attachment.url }}" target="_blank">Прикрепленный файл</a>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">В этой беседе пока нет сообщений.</div>
+        {% endfor %}
+    </div>
+
+    <!-- Форма для отправки нового сообщения -->
+    <div class="mt-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-primary">
+                <i class="bi-send"></i> Отправить
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

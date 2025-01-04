@@ -1,0 +1,38 @@
+{% extends 'accounts/base.html' %}
+{% load user_tags %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Отображение уведомлений -->
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h1>Мои беседы</h1>
+    <a href="{% url 'accounts:create_conversation' %}" class="btn btn-primary mb-3">
+        <i class="bi-chat"></i> Создать беседу
+    </a>
+    <div class="list-group">
+        {% for conversation in conversations %}
+        <div class="list-group-item">
+            <a href="{% url 'accounts:conversation_detail' conversation.id %}">
+                {{ conversation.subject }}
+            </a>
+            <div class="text-muted">
+                Участники:
+                {% for participant in conversation.participants.all %}
+                {{ participant.username }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">У вас пока нет бесед.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

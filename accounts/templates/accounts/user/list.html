@@ -1,0 +1,44 @@
+{% extends 'accounts/base.html' %}
+{% load user_tags %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Форма поиска -->
+    <form method="get" action="{% url 'accounts:user_list' %}">
+        <div class="input-group mb-3">
+            <input type="search" name="query" class="form-control" placeholder="Имя пользователя"
+                   value="{{ request.GET.query }}"/>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi-search"></i>
+            </button>
+            <a href="{% url 'accounts:user_list' %}" class="btn btn-secondary">Сбросить</a>
+        </div>
+    </form>
+
+    <h1 class="mb-4">  <!-- Добавлен класс mb-4 для отступа -->
+        {{ 'accounts:userwithaccount'|model_verbose_name_plural }}
+    </h1>
+
+    <a href="{% url 'accounts:create_conversation' %}" class="btn btn-primary mb-3">
+        <i class="bi-chat"></i> Создать беседу
+    </a>
+
+    {% if users_with_account %}
+    <div class="list-group">
+        {% for user_with_account in users_with_account %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'accounts:user_detail' user_with_account.user.id %}" class="text-decoration-none">
+                {{ user_with_account.user.username }}
+            </a>
+            <a href="{% url 'accounts:send_message' user_with_account.user.id %}" class="btn btn-primary btn-sm">
+                <i class="bi-send"></i> Отправить сообщение
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">Пользователи не найдены</div>
+    {% endif %}
+</div>
+{% endblock %}

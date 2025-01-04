@@ -1,0 +1,41 @@
+{% extends 'accounts/base.html' %}
+{% load user_tags %}
+{% load django_bootstrap5 %}
+
+{% block breadcrumb %}
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:user_list' %}">
+          {{ "accounts:userwithaccount"|model_verbose_name_plural }}
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:user_detail' form.instance.user_id %}">
+          {{ form.instance.user.username }}
+        </a>
+      </li>
+      <li class="breadcrumb-item active">
+        Редактирование пользователя
+      </li>
+    </ol>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <h1>Редактирование пользователя: {{ form.instance.user.username }}</h1>
+
+  {% if user == form.instance.user or user.is_superuser %}
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form form layout='floating' %}
+      {% bootstrap_button button_type="submit" content="Сохранить" %}
+      <a href="{% url 'accounts:user_detail' form.instance.user.id %}" class="btn btn-secondary">Отмена</a>
+    </form>
+  {% else %}
+    <div class="alert alert-warning">
+      <h4 class="alert-heading">Доступ запрещен</h4>
+      <p>У вас нет прав для редактирования этого аккаунта.</p>
+    </div>
+  {% endif %}
+{% endblock %}
